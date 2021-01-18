@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from "vuex-persistedstate";
+import EventInterpreter from '@/store/EventInterpreter';
 
 Vue.use(Vuex)
 
@@ -21,32 +22,54 @@ export default new Vuex.Store({
     apiKey: null,
     pubSubChannelId: null,
 
+    mostRecentEvent: null,
     events: [],
+    alive: {},
+
+    lastAction: null,
 
   },
   mutations: {
+    logout(state) {
+      state.email= null;
+      state.apiKey = null;
+    },
     setEmail(state, email) { state.email = email; },
     setOtp(state, otp) { state.otp = otp; },
     setAuth(state, data) {
+      state.otp = null;
       state.apiKey = data['apiKey'];
       state.pubSubChannelId = data['channel'];
     },
+
     newEvent(state, event) {
+      const e = new EventInterpreter(this.event);
+      state.mostRecentEvent = e;
+      state.alive[event.source] = event.received;
       state.events.unshift(event);
       state.events = state.events.slice(0,100);
     },
+
+    triggerAction(state, action) { state.lastAction = action; }
+
   },
   actions: {
+    logout(context) { context.commit('logout'); },
     setEmail(context, email) { context.commit('setEmail', email); },
     setOtp(context, otp) { context.commit('setOtp', otp); },
     newEvent(context, event) { context.commit('newEvent', event); },
+    triggerAction(context, action) { context.commit('triggerAction', action); }
   },
   getters: {
     email(state) { return state.email; },
     otp(state) { return state.otp; },
     apiKey(state) { return state.apiKey; },
     pubSubChannelId(state) { return state.pubSubChannelId; },
+
+    mostRecentEvent(state) { return state.mostRecentEvent; },
     recentEvents(state) { return state.events.slice(0,20); },
+    alive(state) { return state.alive; },
+    
   },
   modules: {},
   plugins: [ appState, createPersistedState({ filter: mutation => (mutation!=='newEvent') }) ],

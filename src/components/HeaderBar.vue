@@ -1,32 +1,36 @@
 <template>
   <v-app-bar dense app color="info">
 
+    <v-menu bottom left >
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn dark icon v-bind="attrs" v-on="on" >
+          <v-icon>mdi-dots-vertical</v-icon>
+        </v-btn>
+      </template>
+
+      <v-list dense>
+        <v-list-item dense>
+          <v-list-item-title @click="logout">Logout</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
+
     <v-spacer></v-spacer>
-
-      <v-tooltip bottom>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn class="mx-2" icon small color="white" :to="{name: 'Live'}" v-bind="attrs" v-on="on" >
-            <v-icon dense>mdi-credit-card-outline</v-icon>
-          </v-btn>
-        </template>
-        <span>Card Management</span>
-      </v-tooltip>
-
-
+      <HeaderBarIcon icon="mdi-watering-can-outline" tooltip="Irrigation" to="Irrigation" />
+      <HeaderBarIcon icon="mdi-history" tooltip="Event History" to="Events" />
+      <HeaderBarIcon icon="mdi-home" tooltip="Home" to="Statuses" />
   </v-app-bar>
+
 </template>
 
 <script>
-// import SearchBox from '@/components/SearchBox';
-// import HeaderBarRoutes from '@/components/HeaderBarRoutes';
-// export default {
-//   components: {
-//     SearchBox,
-//     HeaderBarRoutes,
-//   },
-//   props: ['displaySearchOnRoutes'],
-//   computed: {
-//     loggedInAndLive() { return this.$store.getters.venueId!==null; },
-//   },
-// };
+import HeaderBarIcon from '@/components/HeaderBarIcon';
+export default {
+  components: {
+    HeaderBarIcon,
+  },
+  methods: {
+    logout() { this.$store.dispatch('logout'); },
+  }
+};
 </script>

@@ -12,6 +12,17 @@ const appState = store => {
       fetch(apiUrl(`auth?email=${state.email}&otp=${mutation.payload}`)).then(response => response.json()).then(json => {store.commit('setAuth', json) });
     }
 
+    if (mutation.type=='triggerAction') { postMutation(state, mutation); }
+
+
+    function postMutation(state, mutation) {
+        console.log(mutation);
+        fetch(`${baseURL}action?e=${state.email}&k=${state.apiKey}`, {
+          method: 'POST',
+          body: JSON.stringify(mutation['payload'])
+        });
+    }
+
     // // if (mutation.type=='setCustomerName') {
     //   // let key = state.apiKey;
     // if ((mutation.type=='setAuth') && (mutation.payload) && (mutation.payload['apiKey']) ) {

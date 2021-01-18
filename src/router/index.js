@@ -2,19 +2,26 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '@/views/login/Home.vue'
 import Events from '@/views/realTime/Events.vue'
+import Statuses from '@/views/realTime/Statuses.vue'
+import Irrigation from '@/views/irrigation/Status.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
+    name: 'Statuses',
+    component: Statuses
   },
   {
     path: '/events',
     name: 'Events',
     component: Events
+  },
+  {
+    path: '/irrigation',
+    name: 'Irrigation',
+    component: Irrigation
   },
   {
     path: '/about',
@@ -30,4 +37,4 @@ const router = new VueRouter({
   routes
 })
 
-export default router
+export default router;

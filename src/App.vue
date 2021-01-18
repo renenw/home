@@ -67,12 +67,11 @@
       userState() {
         let s = 'logged_out';
         if (this.$store.getters.email) {
-          s = 'otp';
-          if (this.$store.getters.otp) {
-            s = 'initiailising';
-            if (this.$store.getters.apiKey) {
-              s = 'live';
-            }
+          if (this.$store.getters.apiKey) {
+            s = 'live';
+          } else {
+            s = 'otp';
+            if (this.$store.getters.otp) { s = 'initiailising'; }
           }
         }
         return s;
